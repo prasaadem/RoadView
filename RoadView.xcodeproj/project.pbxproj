@@ -15,6 +15,7 @@
 		C8AD8BD21E8DBE730095AD99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8AD8BD11E8DBE730095AD99 /* Assets.xcassets */; };
 		C8AD8BD51E8DBE730095AD99 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C8AD8BD31E8DBE730095AD99 /* LaunchScreen.storyboard */; };
 		C8AD8BE01E8DBF440095AD99 /* MapTasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8AD8BDF1E8DBF440095AD99 /* MapTasks.swift */; };
+		C8AD8BE31E8DCED40095AD99 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = C8AD8BE21E8DCED40095AD99 /* search.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		C8AD8BD61E8DBE730095AD99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C8AD8BDC1E8DBEFD0095AD99 /* RoadView-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RoadView-Bridging-Header.h"; sourceTree = "<group>"; };
 		C8AD8BDF1E8DBF440095AD99 /* MapTasks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapTasks.swift; sourceTree = "<group>"; };
+		C8AD8BE21E8DCED40095AD99 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = search.png; path = ../../../Downloads/search.png; sourceTree = "<group>"; };
 		C8F34DFA8977BF4D288B2031 /* Pods-RoadView.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoadView.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RoadView/Pods-RoadView.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -57,6 +59,7 @@
 			isa = PBXGroup;
 			children = (
 				C8AD8BC61E8DBE730095AD99 /* RoadView */,
+				C8AD8BE11E8DCEC40095AD99 /* Images */,
 				C8AD8BC51E8DBE730095AD99 /* Products */,
 				DBE8E312C402AE331B14A374 /* Pods */,
 				1585AE8CCBBD20ECD811A550 /* Frameworks */,
@@ -84,6 +87,15 @@
 				C8AD8BCE1E8DBE730095AD99 /* RoadView.xcdatamodeld */,
 				C8AD8BDC1E8DBEFD0095AD99 /* RoadView-Bridging-Header.h */,
 			);
+			path = RoadView;
+			sourceTree = "<group>";
+		};
+		C8AD8BE11E8DCEC40095AD99 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				C8AD8BE21E8DCED40095AD99 /* search.png */,
+			);
+			name = Images;
 			path = RoadView;
 			sourceTree = "<group>";
 		};
@@ -163,6 +175,7 @@
 				C8AD8BD51E8DBE730095AD99 /* LaunchScreen.storyboard in Resources */,
 				C8AD8BD21E8DBE730095AD99 /* Assets.xcassets in Resources */,
 				C8AD8BCD1E8DBE730095AD99 /* Main.storyboard in Resources */,
+				C8AD8BE31E8DCED40095AD99 /* search.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
