@@ -2,4 +2,5 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'RoadView' do
   pod 'GoogleMaps'
   pod 'GooglePlaces'
+  pod 'CNPPopupController'
 end

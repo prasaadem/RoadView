@@ -18,6 +18,8 @@ enum TravelModes: Int {
 
 class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDelegate {
     
+    var popupController:CNPPopupController?
+    
     @IBOutlet weak var viewMap: GMSMapView!
     @IBOutlet weak var destination: UITextField!
     
@@ -42,6 +44,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     var waypointsArray: Array<String> = []
     
     var travelMode = TravelModes.driving
+    
+    var destinationPlace: GMSPlace!
+    var sourcePlace: GMSPlace!
     
     
     override func viewDidLoad() {
@@ -73,6 +78,65 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
             didFindMyLocation = true
         }
 
+    }
+    
+    func showPopupWithStyle(_ popupStyle: CNPPopupStyle) {
+        
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
+        paragraphStyle.alignment = NSTextAlignment.center
+        
+        let title = NSAttributedString(string: destinationPlace.name, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 24), NSParagraphStyleAttributeName: paragraphStyle])
+        let lineOne = NSAttributedString(string: destinationPlace.formattedAddress!, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 18), NSParagraphStyleAttributeName: paragraphStyle])
+        let lineTwo = NSAttributedString(string: String(describing: destinationPlace.website), attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 18), NSForegroundColorAttributeName: UIColor.init(colorLiteralRed: 0.46, green: 0.8, blue: 1.0, alpha: 1.0), NSParagraphStyleAttributeName: paragraphStyle])
+        
+        let button = CNPPopupButton.init(frame: CGRect(x: 0, y: 0, width: 200, height: 60))
+        button.setTitleColor(UIColor.white, for: UIControlState())
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button.setTitle("Close Me", for: UIControlState())
+        
+        button.backgroundColor = UIColor.init(colorLiteralRed: 0.46, green: 0.8, blue: 1.0, alpha: 1.0)
+        
+        button.layer.cornerRadius = 4;
+        button.selectionHandler = { (button) -> Void in
+            self.popupController?.dismiss(animated: true)
+            print("Block for button: \(String(describing: button.titleLabel?.text))")
+        }
+        
+        let button1 = CNPPopupButton.init(frame: CGRect(x: 220, y: 0, width: 200, height: 60))
+        button1.setTitleColor(UIColor.white, for: UIControlState())
+        button1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
+        button1.setTitle("Get Directions", for: UIControlState())
+        
+        button1.backgroundColor = UIColor.init(colorLiteralRed: 0.46, green: 0.8, blue: 1.0, alpha: 1.0)
+        
+        button1.layer.cornerRadius = 4;
+        button1.selectionHandler = { (button1) -> Void in
+            self.popupController?.dismiss(animated: true)
+            self.createRoute()
+        }
+        
+        let titleLabel = UILabel()
+        titleLabel.numberOfLines = 0;
+        titleLabel.attributedText = title
+        
+        let lineOneLabel = UILabel()
+        lineOneLabel.numberOfLines = 0;
+        lineOneLabel.attributedText = lineOne;
+        
+        let imageView = UIImageView.init(image: UIImage.init(named: "icon"))
+        
+        let lineTwoLabel = UILabel()
+        lineTwoLabel.numberOfLines = 0;
+        lineTwoLabel.attributedText = lineTwo;
+
+        
+        let popupController = CNPPopupController(contents:[titleLabel, lineOneLabel, button1, button])
+        popupController.theme = CNPPopupTheme.default()
+        popupController.theme.popupStyle = popupStyle
+        popupController.delegate = self
+        self.popupController = popupController
+        popupController.present(animated: true)
     }
     
     
@@ -145,47 +209,26 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
     }
     
     
-    @IBAction func createRoute(_ sender: AnyObject) {
-        let addressAlert = UIAlertController(title: "Create Route", message: "Connect locations with a route:", preferredStyle: UIAlertControllerStyle.alert)
-        
-        addressAlert.addTextField { (textField) -> Void in
-            textField.placeholder = "Origin?"
-        }
-        
-        addressAlert.addTextField { (textField) -> Void in
-            textField.placeholder = "Destination?"
-        }
-        
-        
-        let createRouteAction = UIAlertAction(title: "Create Route", style: UIAlertActionStyle.default) { (alertAction) -> Void in
+    func createRoute() {
             if (self.routePolyline) != nil {
                 self.clearRoute()
                 self.waypointsArray.removeAll(keepingCapacity: false)
             }
             
-            let origin = (addressAlert.textFields![0] as UITextField).text!
-            let destination = (addressAlert.textFields![1] as UITextField).text!
+            let origin = "College station"
+            let destination = self.destinationPlace.name
+        
             
             self.mapTasks.getDirections(origin, destination: destination, waypoints: nil, travelMode: self.travelMode, completionHandler: { (status, success) -> Void in
                 if success {
                     self.configureMapAndMarkersForRoute()
                     self.drawRoute()
-                    self.displayRouteInfo()
+                    //self.displayRouteInfo()
                 }
                 else {
                     print(status)
                 }
             })
-        }
-        
-        let closeAction = UIAlertAction(title: "Close", style: UIAlertActionStyle.cancel) { (alertAction) -> Void in
-            
-        }
-        
-        addressAlert.addAction(createRouteAction)
-        addressAlert.addAction(closeAction)
-        
-        present(addressAlert, animated: true, completion: nil)
     }
     
     
@@ -360,6 +403,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate, GMSMapViewDel
         present(autocompleteController, animated: true, completion: nil)
     }
     
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        self.showPopupWithStyle(CNPPopupStyle.actionSheet)
+        return true
+    }
 }
 
 extension ViewController: GMSAutocompleteViewControllerDelegate {
@@ -367,9 +414,11 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
     // Handle the user's selection.
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
         destination.text = place.name
+        destinationPlace = place
         print("Place: \(place)")
         setupLocationMarker(place.coordinate)
         viewMap.camera = GMSCameraPosition.camera(withTarget: place.coordinate, zoom: 10.0)
+        self.showPopupWithStyle(CNPPopupStyle.actionSheet)
         dismiss(animated: true, completion: nil)
     }
     
@@ -391,5 +440,15 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
     func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
+}
+
+extension ViewController : CNPPopupControllerDelegate {
     
+    func popupControllerWillDismiss(_ controller: CNPPopupController) {
+        print("Popup controller will be dismissed")
+    }
+    
+    func popupControllerDidPresent(_ controller: CNPPopupController) {
+        print("Popup controller presented")
+    }
 }

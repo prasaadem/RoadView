@@ -107,7 +107,7 @@ class MapTasks: NSObject {
                     }
                 }
                 
-                if let travel = travelMode {
+                if (travelMode) != nil {
                     var travelModeString = ""
                     
                     switch travelMode.rawValue {

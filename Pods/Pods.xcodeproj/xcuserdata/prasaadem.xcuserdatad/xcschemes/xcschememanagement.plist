@@ -4,6 +4,11 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>CNPPopupController.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-RoadView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -12,7 +17,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>1B01A57DC1E530F1CE31CE92040AA1F8</key>
+		<key>1413B9489D31E0B1968A0B2004E72B13</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A70E673BF06A7E85595EE2AD4171D215</key>
 		<dict>
 			<key>primary</key>
 			<true/>
